@@ -8,6 +8,8 @@ def request(url):
     try:
         response = requests.get(url, headers=header)
         return response.text
+    except KeyboardInterrupt:
+        sys.exit(0)
     except:
         pass
 
