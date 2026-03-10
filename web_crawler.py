@@ -1,3 +1,5 @@
+import sys
+
 import requests
 from bs4 import BeautifulSoup
 
@@ -14,21 +16,27 @@ def get_links(html):
     except:
         pass
 
-TO_CRAWL = ["http://example.com"]
+TO_CRAWL = []
 CRAWLED = set()
 
-while 1:
-    if TO_CRAWL:
-        url = TO_CRAWL.pop()
-        response = requests.get(url)
-        html = response.text
-        links = get_links(html)
-        if links:
-            for link in links:
-                if link not in CRAWLED and link not in TO_CRAWL:
-                    TO_CRAWL.append(link)
-        print("Crawling {}".format(url))
-        CRAWLED.add(url)
-    else:
-        print("Done")
-        break
+def crawl():
+    while 1:
+        if TO_CRAWL:
+            url = TO_CRAWL.pop()
+            response = requests.get(url)
+            html = response.text
+            links = get_links(html)
+            if links:
+                for link in links:
+                    if link not in CRAWLED and link not in TO_CRAWL:
+                        TO_CRAWL.append(link)
+            print("Crawling {}".format(url))
+            CRAWLED.add(url)
+        else:
+            print("Done")
+            break
+
+if __name__ == "__main__":
+    url = sys.argv[1]
+    TO_CRAWL.append(url)
+    crawl()
