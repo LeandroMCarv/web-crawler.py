@@ -8,8 +8,7 @@ def request(url):
     try:
         response = requests.get(url, headers=header)
         return response.text
-    except Exception as error:
-        print(error)
+    except:
         pass
 
 def get_links(html):
@@ -33,13 +32,16 @@ def crawl():
         if TO_CRAWL:
             url = TO_CRAWL.pop()
             html = request(url)
-            links = get_links(html)
-            if links:
-                for link in links:
-                    if link not in CRAWLED and link not in TO_CRAWL:
-                        TO_CRAWL.append(link)
-            print("Crawling {}".format(url))
-            CRAWLED.add(url)
+            if html:
+                links = get_links(html)
+                if links:
+                    for link in links:
+                        if link not in CRAWLED and link not in TO_CRAWL:
+                            TO_CRAWL.append(link)
+                print("Crawling {}".format(url))
+                CRAWLED.add(url)
+            else:
+                CRAWLED.add(url)#nao conseguiu fazer requisicao, evita tentar dnv
         else:
             print("Done")
             break
